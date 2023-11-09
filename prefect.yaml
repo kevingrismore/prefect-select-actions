@@ -18,7 +18,7 @@ definitions:
         - prefect_docker.deployments.steps.build_docker_image:
             id: build-image
             requires: prefect-docker
-            image_name: us-central1-docker.pkg.dev/my-project/my-repo/my-image
+            image_name: kevingrismoreprefect/github-actions-demo
             tag: "{{ get-commit-hash.stdout }}"
             dockerfile: Dockerfile
     push:
