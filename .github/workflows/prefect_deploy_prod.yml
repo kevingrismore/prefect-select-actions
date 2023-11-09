@@ -1,0 +1,34 @@
+name: Deploy production flows
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  push:
+    branches:
+      - main
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      -steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - name: Get changed requirements file
+        id: changed-files-requirements
+        uses: tj-actions/changed-files@v40
+        with:
+          files: requirements.txt
+      - name: Run step if any file(s) in the docs folder change
+        if: steps.changed-files-requirements.outputs.any_changed == 'true'
+        run: |
+          echo "Dependencies in requirements.txt have changed."
+          echo "Building and pushing docker image during deployment."
+          python select_actions.py --build build_image --push push_image --pull staging
+        if: steps.changed-files-requirements.outputs.any_changed == 'false'
+        run: |
+          echo "Dependencies in requirements.txt have not changed."
+          echo "Skipping image build and push."
+          python select_actions.py --build no_action --push no_action --pull staging
+      - run: prefect deploy --all

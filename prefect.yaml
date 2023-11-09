@@ -1,0 +1,57 @@
+# Welcome to your prefect.yaml file! You can use this file for storing and managing
+# configuration for deploying your flows. We recommend committing this file to source
+# control along with your flow code.
+
+# Generic metadata about this project
+name: prefect-select-actions
+prefect-version: 2.14.3
+
+definitions:
+  actions:
+    build:
+      no_action:
+      build_image:
+        - prefect.deployments.steps.run_shell_script:
+          id: get-commit-hash
+          script: git rev-parse --short HEAD
+          stream_output: false
+        - prefect_docker.deployments.steps.build_docker_image:
+          id: build-image
+          requires: prefect-docker
+          image_name: us-central1-docker.pkg.dev/my-project/my-repo/my-image
+          tag: "{{ get-commit-hash.stdout }}"
+          dockerfile: Dockerfile
+          platform: linux/amd64
+    push:
+      no_action:
+      push_image:
+        - prefect_docker.deployments.steps.push_docker_image:
+          requires: prefect-docker
+          image_name: "{{ build-image.image_name }}"
+          tag: "{{ build-image.tag }}"
+    pull:
+      staging:
+        - prefect.deployments.steps.git_clone:
+          repository: git@github.com:kevingrismore/prefect-select-actions.git
+          branch: staging
+          credentials: "{{ prefect.blocks.github-credentials.my-block-name }}"
+      production:
+        - prefect.deployments.steps.git_clone:
+          repository: git@github.com:kevingrismore/prefect-select-actions.git
+          branch: main
+          credentials: "{{ prefect.blocks.github-credentials.my-block-name }}"
+
+# build section allows you to manage and build docker images
+build: null
+
+push: null
+
+pull: null
+
+deployments:
+  - name: my-deployment
+    flow_name: my-flow
+    entrypoint: flows/my_flow.py:my_flow
+    work_pool:
+      name: demo-pool
+      work_queue_name: default
