@@ -50,8 +50,7 @@ pull: null
 
 deployments:
   - name: my-deployment
-    flow_name: my-flow
     entrypoint: flows/my_flow.py:my_flow
     work_pool:
-      name: demo-pool
-      work_queue_name: default
+      name: prefect-managed
+      work_queue_name: null
