@@ -21,7 +21,6 @@ definitions:
             image_name: us-central1-docker.pkg.dev/my-project/my-repo/my-image
             tag: "{{ get-commit-hash.stdout }}"
             dockerfile: Dockerfile
-            platform: linux/amd64
     push:
       no_action:
       push_image:
