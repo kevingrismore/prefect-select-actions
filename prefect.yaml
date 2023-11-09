@@ -12,23 +12,23 @@ definitions:
       no_action:
       build_image:
         - prefect.deployments.steps.run_shell_script:
-          id: get-commit-hash
-          script: git rev-parse --short HEAD
-          stream_output: false
+            id: get-commit-hash
+            script: git rev-parse --short HEAD
+            stream_output: false
         - prefect_docker.deployments.steps.build_docker_image:
-          id: build-image
-          requires: prefect-docker
-          image_name: us-central1-docker.pkg.dev/my-project/my-repo/my-image
-          tag: "{{ get-commit-hash.stdout }}"
-          dockerfile: Dockerfile
-          platform: linux/amd64
+            id: build-image
+            requires: prefect-docker
+            image_name: us-central1-docker.pkg.dev/my-project/my-repo/my-image
+            tag: "{{ get-commit-hash.stdout }}"
+            dockerfile: Dockerfile
+            platform: linux/amd64
     push:
       no_action:
       push_image:
         - prefect_docker.deployments.steps.push_docker_image:
-          requires: prefect-docker
-          image_name: "{{ build-image.image_name }}"
-          tag: "{{ build-image.tag }}"
+            requires: prefect-docker
+            image_name: "{{ build-image.image_name }}"
+            tag: "{{ build-image.tag }}"
     pull:
       staging:
         - prefect.deployments.steps.git_clone:
