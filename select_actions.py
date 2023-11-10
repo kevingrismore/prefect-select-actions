@@ -36,8 +36,6 @@ def select_actions(build: str, push: str, pull: str, staging: bool) -> None:
     for step, action in actions.items():
         edit_yaml(step, action)
 
-    select_deployments(staging=staging)
-
 
 if __name__ == "__main__":
     select_actions()
