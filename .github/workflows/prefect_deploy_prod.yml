@@ -1,5 +1,4 @@
 name: Deploy production flows
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
   push:
     branches:
@@ -30,15 +29,15 @@ jobs:
         run: |
           echo "Dependencies in requirements.txt have changed."
           echo "Building and pushing docker image during deployment."
-          python select_actions.py --build build_image --push push_image --pull staging
+          python select_actions.py --build build_image --push push_image --pull production
       - name: Run step if requirements.txt did not change
         if: steps.changed-files-requirements.outputs.any_changed == 'false'
         run: |
           echo "Dependencies in requirements.txt have not changed."
           echo "Skipping image build and push."
-          python select_actions.py --build no_action --push no_action --pull staging
+          python select_actions.py --build no_action --push no_action --pull production
       - name: Deploy all flows
         env:
           PREFECT_API_KEY: ${{ secrets.PREFECT_API_KEY }}
-          PREFECT_API_URL: ${{ secrets.PREFECT_API_URL }}
+          PREFECT_API_URL: ${{ secrets.PREFECT_API_URL_PROD }}
         run: prefect deploy --all

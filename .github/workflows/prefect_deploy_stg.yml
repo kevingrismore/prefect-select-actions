@@ -1,5 +1,4 @@
 name: Deploy staging flows
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
   push:
     branches:
@@ -40,5 +39,5 @@ jobs:
       - name: Deploy all flows
         env:
           PREFECT_API_KEY: ${{ secrets.PREFECT_API_KEY }}
-          PREFECT_API_URL: ${{ secrets.PREFECT_API_URL }}
+          PREFECT_API_URL: ${{ secrets.PREFECT_API_URL_STG }}
         run: prefect deploy --all
