@@ -28,7 +28,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Run step if requirements.txt changed
+      - name: prefect deploy - dependency changes
         env:
           PREFECT_API_KEY: ${{ secrets.PREFECT_API_KEY }}
           PREFECT_API_URL: ${{ secrets.PREFECT_API_URL_STG }}
@@ -37,7 +37,7 @@ jobs:
           echo "Dependencies in requirements.txt have changed."
           echo "Building and pushing docker image during deployment."
           python select_actions.py --build build_image_stg --push push_image --pull staging
-      - name: Run step if prefect.yaml changed and requriements.txt did not change
+      - name: prefect deploy - deployment changes only
         env:
           PREFECT_API_KEY: ${{ secrets.PREFECT_API_KEY }}
           PREFECT_API_URL: ${{ secrets.PREFECT_API_URL_STG }}
