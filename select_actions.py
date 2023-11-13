@@ -25,7 +25,7 @@ def edit_yaml(step: str, action: str) -> None:
 @click.option("--build")
 @click.option("--push")
 @click.option("--pull")
-def select_actions(build: str, push: str, pull: str, staging: bool) -> None:
+def select_actions(build: str, push: str, pull: str) -> None:
     """Calls edit_yaml for each step in the Prefect deployment pipeline."""
     actions = {
         "build": build,
