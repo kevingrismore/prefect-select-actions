@@ -29,7 +29,7 @@ jobs:
         run: |
           echo "Dependencies in requirements.txt have changed."
           echo "Building and pushing docker image during deployment."
-          python select_actions.py --build build_image --push push_image --pull production
+          python select_actions.py --build build_image_prod --push push_image --pull production
       - name: Run step if requirements.txt did not change
         if: steps.changed-files-requirements.outputs.any_changed == 'false'
         run: |

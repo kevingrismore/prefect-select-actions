@@ -10,7 +10,7 @@ definitions:
   actions:
     build:
       no_action:
-      build_image:
+      build_image_stg:
         - prefect.deployments.steps.run_shell_script:
             id: get-commit-hash
             script: git rev-parse --short HEAD
@@ -18,7 +18,18 @@ definitions:
         - prefect_docker.deployments.steps.build_docker_image:
             id: build-image
             requires: prefect-docker
-            image_name: kevingrismoreprefect/github-actions-demo
+            image_name: kevingrismoreprefect/github-actions-demo-stg
+            tag: "{{ get-commit-hash.stdout }}"
+            dockerfile: Dockerfile
+      build_image_prod:
+        - prefect.deployments.steps.run_shell_script:
+            id: get-commit-hash
+            script: git rev-parse --short HEAD
+            stream_output: false
+        - prefect_docker.deployments.steps.build_docker_image:
+            id: build-image
+            requires: prefect-docker
+            image_name: kevingrismoreprefect/github-actions-demo-prod
             tag: "{{ get-commit-hash.stdout }}"
             dockerfile: Dockerfile
     push:
