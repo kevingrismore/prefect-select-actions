@@ -16,7 +16,9 @@ jobs:
         id: changed-files-requirements
         uses: tj-actions/changed-files@v40
         with:
-          files: requirements.txt
+          files: |
+            requirements.txt
+            Dockerfile
       - name: Get changed prefect.yaml file
         id: changed-files-prefect
         uses: tj-actions/changed-files@v40

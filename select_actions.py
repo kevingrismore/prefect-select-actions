@@ -15,7 +15,7 @@ def edit_yaml(step: str, action: str) -> None:
 
     with open("prefect.yaml", "r") as f:
         data = yaml.load(f)
-        data[step] = data["definitions"]["actions"][step][action]
+        data[step] = data["actions"][step][action]
 
     with open("prefect.yaml", "w") as f:
         yaml.dump(data, f)
@@ -34,7 +34,8 @@ def select_actions(build: str, push: str, pull: str) -> None:
     }
 
     for step, action in actions.items():
-        edit_yaml(step, action)
+        if action:
+            edit_yaml(step, action)
 
 
 if __name__ == "__main__":
