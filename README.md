@@ -76,9 +76,9 @@ push: null
 pull: null
 ```
 
-### Build a production image
+### Build and push an image
 
-When the `Dockerfile` or `requirements.txt` changes, the image must be built and pushed. The Github Actions workflow will detect these changes and run the following:
+When the `Dockerfile` or `requirements.txt` changes, the image must be built and pushed. Let's say this has happened on the `main` branch. The Github Actions workflow will detect these changes and run the following:
 
 `python select_actions.py --build build_image --push push_image --pull production`
 
@@ -134,9 +134,9 @@ pull: *id003
 
 ### Update or create a deployment in `prefect.yaml`
 
-When a deployment definition is changed or added, we need to persist those changes to Prefect Cloud/Server, but no image building or pushing is required:
+When a deployment definition is changed or added, we need to persist those changes to Prefect Cloud/Server, but no image building or pushing is required. This time, the changes were pushed to the `staging` branch:
 
-`python select_actions.py --pull production`
+`python select_actions.py --pull staging`
 
 ```yaml
 actions:
@@ -170,12 +170,12 @@ actions:
           image_name: "{{ build-image.image_name }}"
           tag: "{{ build-image.tag }}"
   pull:
-    staging:
+    staging: &id001
       - prefect.deployments.steps.git_clone:
         repository: git@github.com:kevingrismore/prefect-select-actions.git
         branch: staging
         credentials: "{{ prefect.blocks.github-credentials.my-block-name }}"
-    production: &id001
+    production:
       - prefect.deployments.steps.git_clone:
         repository: git@github.com:kevingrismore/prefect-select-actions.git
         branch: main
