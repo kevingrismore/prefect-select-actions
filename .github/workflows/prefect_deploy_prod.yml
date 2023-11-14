@@ -48,5 +48,5 @@ jobs:
           echo "Dependencies in requirements.txt have not changed."
           echo "Skipping image build and push."
           pip install -r requirements.txt
-          python select_actions.py --build no_action --push no_action --pull production
+          python select_actions.py --pull production
           prefect deploy --all
