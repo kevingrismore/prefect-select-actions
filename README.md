@@ -10,6 +10,13 @@ This repository supposes the following, for the sake of example:
 - You have one or more deployments which should be mirrored across workspaces.
 - Your deployments are configured to use git code storage, and the branch a deployment uses should differ per workspace.
 - Flows run in containers, so images need to be rebuilt when Python dependencies or docker build steps change. Since dependencies can differ per branch/workspace, each branch/workspace pairing should have its own image.
+- Images are stored on Dockerhub.
+- The following values are stored as secrets in the repository's settings:
+  - PREFECT_API_KEY
+  - PREFECT_API_URL (API url for produciton workspace)
+  - PREFECT_API_URL_STG (API url for staging workspace)
+  - DOCKERHUB_USERNAME
+  - DOCKERHUB_TOKEN
 
 When the Github Actions workflow is run, `select_actions` will modify the `prefect.yaml` that has been cloned into the Github Actions runner. `prefect deploy --all` will be run against the modified yaml, which only persists for the duration of the Actions workflow.
 
